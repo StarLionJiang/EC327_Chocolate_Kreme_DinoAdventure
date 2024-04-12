@@ -4,6 +4,11 @@ from assets import *
 pygame.init()
 clock = pygame.time.Clock()
 
+mapOffsetX = 0
+mapOffsetY = 0
+mapMove = False
+mapEdge = False
+
 # player location indices
 ppx = swidth/2-playerBaseDim*2
 ppy = sheight/2-playerBaseDim*2
@@ -26,9 +31,9 @@ while True:
     screen.fill((0,0,0))
     for i in range(0,swidth+1, tileDim*tileScale):
         for j in range(0,sheight+1, tileDim*tileScale):
-            x = int(i/(tileDim*tileScale))
-            y = int(j/(tileDim*tileScale))
-            screen.blit(tileList[seedMap[x][y]], (i,j))
+            x = int(i/(tileDim*tileScale)) + round(mapOffsetX)
+            y = int(j/(tileDim*tileScale)) + round(mapOffsetY)
+            screen.blit(tileList[mainMap[x][y]], (i,j))
 
     key = pygame.key.get_pressed()
     totKeys = sum(key)
@@ -85,20 +90,31 @@ while True:
     if key[pygame.K_a] and ppx >= mapBorder:
         playerFacingR = False
         ppx += -spd * dt * spdMultiplier
+    elif key[pygame.K_a] and ppx <= mapBorder:
+        mapMove = True
+        mapOffsetX += -dt*spd/40 * mapMove
     if key[pygame.K_d] and ppx <= swidth-mapBorder-playerBaseDim*playerScale:
         playerFacingR = True
         ppx += spd * dt * spdMultiplier
+    elif key[pygame.K_d] and ppx >= swidth-mapBorder-playerBaseDim*playerScale:
+        mapMove = True
+        mapOffsetX += dt*spd/40 * mapMove
     if key[pygame.K_w] and ppy >= mapBorder:
         ppy += -spd * dt * spdMultiplier
+    elif key[pygame.K_w] and ppy <= mapBorder:
+        mapMove = True
+        mapOffsetY += -dt*spd/40 * mapMove
     if key[pygame.K_s] and ppy <= sheight-mapBorder-playerBaseDim*playerScale:
         ppy += spd * dt * spdMultiplier
+    elif key[pygame.K_s] and ppy >= sheight-mapBorder-playerBaseDim*playerScale:
+        mapMove = True
+        mapOffsetY += dt*spd/40 * mapMove
+    
+    mapMove = False
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-
-    clock.tick()
-    print(clock.get_fps())
 
     pygame.display.update()
