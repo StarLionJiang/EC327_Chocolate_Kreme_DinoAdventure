@@ -1,29 +1,21 @@
 import pygame, sys, time, math
 from random import random
+import spriteSheet
+import map
 pygame.init()
 clock = pygame.time.Clock()
 
 swidth = 960
 sheight = 640
 screen = pygame.display.set_mode((swidth,sheight))
-
-class SpriteSheet():
-	def __init__(self, image):
-		self.sheet = image
-
-	def get_image(self, frame, width, height, scale, colour):
-		image = pygame.Surface((width, height)).convert_alpha()
-		image.blit(self.sheet, (0, 0), ((frame * width), 0, width, height))
-		image = pygame.transform.scale(image, (width * scale, height * scale))
-		image.set_colorkey(colour)
-
-		return image
+mapBorder = 150
 
 playerBaseDim = 24
 playerScale = 4
+
 # right facing player sprites
 playerSpriteImg = pygame.image.load("doux.png").convert_alpha()
-playerSpriteSheet = SpriteSheet(playerSpriteImg)
+playerSpriteSheet = spriteSheet.SpriteSheet(playerSpriteImg)
 
 playerFrames = []
 for x in range(0,23):
@@ -35,7 +27,7 @@ for x in range(0,23):
 
 # left facing player sprites (inverted)
 playerSpriteInv = pygame.transform.flip(playerSpriteImg, True, False)
-playerSpriteInvSheet = SpriteSheet(playerSpriteInv)
+playerSpriteInvSheet = spriteSheet.SpriteSheet(playerSpriteInv)
 
 playerInvFrames = []
 for x in range(23,-1,-1):
@@ -48,21 +40,20 @@ for x in range(23,-1,-1):
 tileScale = int((3/2)*playerScale)
 tileDim = 16
 tileSprites = []
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0000.png"))
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0001.png"))
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0002.png"))
-tileList = []
-for x in range(3):
-    tileList.append(SpriteSheet(tileSprites[x]).get_image(0, tileDim, tileDim, tileScale, (0,0,0)))
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0000.png")) # 0
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0001.png")) # 1
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0002.png")) # 2
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0036.png")) # 3
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0037.png")) # 4
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0038.png")) # 5
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0039.png")) # 6
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0040.png")) # 7
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0041.png")) # 8
+tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0042.png")) # 9
 
-seedMap = []
-for i in range(0,swidth+1, tileDim*tileScale):
-    randMapIndex = []
-    for j in range(0,sheight+1, tileDim*tileScale):
-        rng = int(random()*3)
-        randMapIndex.append(rng)
-    seedMap.append(randMapIndex)     
-   
+tileList = []
+for x in range(10):
+    tileList.append(spriteSheet.SpriteSheet(tileSprites[x]).get_image(0, tileDim, tileDim, tileScale, (0,0,0)))
 
 # player location indices
 ppx = swidth/2-playerBaseDim*2
@@ -88,7 +79,7 @@ while True:
         for j in range(0,sheight+1, tileDim*tileScale):
             x = int(i/(tileDim*tileScale))
             y = int(j/(tileDim*tileScale))
-            screen.blit(tileList[seedMap[x][y]], (i,j))
+            screen.blit(tileList[map.seedMap[x][y]], (i,j))
 
     key = pygame.key.get_pressed()
     totKeys = sum(key)
@@ -142,15 +133,15 @@ while True:
             walkingInterim = 4
 
     # wasd directional movement
-    if key[pygame.K_a] and ppx >= 150:
+    if key[pygame.K_a] and ppx >= mapBorder:
         playerFacingR = False
         ppx += -spd * dt * spdMultiplier
-    if key[pygame.K_d] and ppx <= swidth-150-playerBaseDim*playerScale:
+    if key[pygame.K_d] and ppx <= swidth-mapBorder-playerBaseDim*playerScale:
         playerFacingR = True
         ppx += spd * dt * spdMultiplier
-    if key[pygame.K_w] and ppy >= 150:
+    if key[pygame.K_w] and ppy >= mapBorder:
         ppy += -spd * dt * spdMultiplier
-    if key[pygame.K_s] and ppy <= sheight-150-playerBaseDim*playerScale:
+    if key[pygame.K_s] and ppy <= sheight-mapBorder-playerBaseDim*playerScale:
         ppy += spd * dt * spdMultiplier
 
     for event in pygame.event.get():
