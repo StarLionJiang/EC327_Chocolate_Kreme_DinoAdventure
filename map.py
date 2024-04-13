@@ -48,8 +48,8 @@ from spriteSheet import *
 from assets import *
 
 def TestMap():
-    centeringX = int((swidth-len(mainMap)*tileDim*tileScale)/2)
-    centeringY = int((sheight-len(mainMap[0])*tileDim*tileScale)/2)
+    centeringX = 0#int((swidth-len(mainMap)*tileDim*tileScale)/2)
+    centeringY = 0#int((sheight-len(mainMap[0])*tileDim*tileScale)/2)
 
     while True:
         for event in pygame.event.get():
@@ -73,6 +73,6 @@ def TestMap():
         pygame.display.update()
 
 # map preview
-preview = False
+preview = True
 if preview:
     TestMap()

@@ -20,7 +20,7 @@ walkingInterim = walkingFrame
 playerFacingR = True
 
 # general speed value
-spd = 250
+spd = 200
 previousTime = time.time()
 
 while True:
@@ -49,7 +49,7 @@ while True:
                 (i > -tileDim*tileScale and i < swidth) and
                 (j > -tileDim*tileScale and j < sheight)
             ):
-                screen.blit(tileList[mainMap[x][y]], (i,j))
+                screen.blit(tileList[mainMap[x][y]], (i,j))            
 
     key = pygame.key.get_pressed()
     totKeys = sum(key)
@@ -96,11 +96,25 @@ while True:
             screen.blit(playerFrames[walkingFrame], (ppx, ppy))
         else:
             screen.blit(playerInvFrames[walkingFrame], (ppx, ppy))
+    # walking frame iteration
         walkingInterim += dt*spd/20
         walkingFrame = round(walkingInterim)
         if walkingFrame > 9:
             walkingFrame = 4
             walkingInterim = 4
+
+    if round(mapOffsetX) > 0:
+        mapEdge = True
+        mapOffsetX = 0
+    if round(mapOffsetX) < -tileDim*tileScale*len(mainMap)+swidth:
+        mapEdge = True
+        mapOffsetX = -tileDim*tileScale*len(mainMap)+swidth
+    if round(mapOffsetY) > 0:
+        mapEdge = True
+        mapOffsetY = 0
+    if round(mapOffsetY) < -tileDim*tileScale*len(mainMap[0])+sheight:
+        mapEdge = True
+        mapOffsetY = -tileDim*tileScale*len(mainMap[0])+sheight
 
     # wasd directional movement
     if key[pygame.K_a] and ppx >= mapBorder:
@@ -127,5 +141,8 @@ while True:
         mapOffsetY += -dt*spd * mapMove
     
     mapMove = False
+    mapEdge = False
+
+    clock.tick(60)
 
     pygame.display.update()

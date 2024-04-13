@@ -1,7 +1,7 @@
 import pygame, os
 import spriteSheet
 swidth = 960
-sheight = 640
+sheight = 576
 screen = pygame.display.set_mode((swidth,sheight))
 
 playerBaseDim = 24
@@ -32,7 +32,7 @@ for x in range(23,-1,-1):
     )
 
 # tile square assets for map
-tileScale = int((3/2)*playerScale)
+tileScale = 1#int((3/2)*playerScale)
 tileDim = 16
 tileSprites = []
 path = "C:/Users/alvin/Desktop/PyGame/PyGame-First/MapAssets/Tiles"
