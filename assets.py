@@ -32,7 +32,7 @@ for x in range(23,-1,-1):
     )
 
 # tile square assets for map
-tileScale = 1#int((3/2)*playerScale)
+tileScale = int((3/2)*playerScale)
 tileDim = 16
 tileSprites = []
 path = "C:/Users/alvin/Desktop/PyGame/PyGame-First/MapAssets/Tiles"
