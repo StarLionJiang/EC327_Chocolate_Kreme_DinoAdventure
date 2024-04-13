@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 import spriteSheet
 swidth = 960
 sheight = 640
@@ -35,17 +35,11 @@ for x in range(23,-1,-1):
 tileScale = int((3/2)*playerScale)
 tileDim = 16
 tileSprites = []
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0000.png")) # 0
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0001.png")) # 1
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0002.png")) # 2
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0036.png")) # 3
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0037.png")) # 4
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0038.png")) # 5
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0039.png")) # 6
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0040.png")) # 7
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0041.png")) # 8
-tileSprites.append(pygame.image.load("MapAssets/Tiles/tile_0042.png")) # 9
+path = "C:/Users/alvin/Desktop/PyGame/PyGame-First/MapAssets/Tiles"
+dirlist = os.listdir(path)
+for x in range(len(dirlist)):
+    tileSprites.append(pygame.image.load(f"MapAssets/Tiles/{dirlist[x]}"))
 
 tileList = []
-for x in range(10):
+for x in range(len(tileSprites)):
     tileList.append(spriteSheet.SpriteSheet(tileSprites[x]).get_image(0, tileDim, tileDim, tileScale, (0,0,0)))
