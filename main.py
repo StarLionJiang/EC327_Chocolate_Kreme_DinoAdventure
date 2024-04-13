@@ -24,16 +24,35 @@ spd = 250
 previousTime = time.time()
 
 while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+            
     # using deltatime for consistency
     dt = time.time() - previousTime
     previousTime = time.time()
 
     screen.fill((0,0,0))
-    for i in range(0,swidth+1, tileDim*tileScale):
-        for j in range(0,sheight+1, tileDim*tileScale):
-            x = int(i/(tileDim*tileScale)) + round(mapOffsetX)
-            y = int(j/(tileDim*tileScale)) + round(mapOffsetY)
-            screen.blit(tileList[mainMap[x][y]], (i,j))
+
+    tileCount = 0
+    for x, i in enumerate(range(
+        round(mapOffsetX),
+        round(mapOffsetX)+len(mainMap)*tileDim*tileScale, 
+        tileDim*tileScale
+    )):
+        for y, j in enumerate(range(
+            round(mapOffsetY),
+            round(mapOffsetY)+len(mainMap[0])*tileDim*tileScale, 
+            tileDim*tileScale
+        )):
+            if (
+                (i > -tileDim*tileScale and i < swidth) and
+                (j > -tileDim*tileScale and j < sheight)
+            ):
+                screen.blit(tileList[mainMap[x][y]], (i,j))
+                tileCount += 1
+    print(f"Total file count: {tileCount}")
 
     key = pygame.key.get_pressed()
     totKeys = sum(key)
@@ -92,29 +111,27 @@ while True:
         ppx += -spd * dt * spdMultiplier
     elif key[pygame.K_a] and ppx <= mapBorder:
         mapMove = True
-        mapOffsetX += -dt*spd/40 * mapMove
+        mapOffsetX += dt*spd * mapMove
     if key[pygame.K_d] and ppx <= swidth-mapBorder-playerBaseDim*playerScale:
         playerFacingR = True
         ppx += spd * dt * spdMultiplier
     elif key[pygame.K_d] and ppx >= swidth-mapBorder-playerBaseDim*playerScale:
         mapMove = True
-        mapOffsetX += dt*spd/40 * mapMove
+        mapOffsetX += -dt*spd * mapMove
     if key[pygame.K_w] and ppy >= mapBorder:
         ppy += -spd * dt * spdMultiplier
     elif key[pygame.K_w] and ppy <= mapBorder:
         mapMove = True
-        mapOffsetY += -dt*spd/40 * mapMove
+        mapOffsetY += dt*spd * mapMove
     if key[pygame.K_s] and ppy <= sheight-mapBorder-playerBaseDim*playerScale:
         ppy += spd * dt * spdMultiplier
     elif key[pygame.K_s] and ppy >= sheight-mapBorder-playerBaseDim*playerScale:
         mapMove = True
-        mapOffsetY += dt*spd/40 * mapMove
+        mapOffsetY += -dt*spd * mapMove
     
     mapMove = False
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-
+    clock.tick()
+    print(clock.get_fps())
+    
     pygame.display.update()
