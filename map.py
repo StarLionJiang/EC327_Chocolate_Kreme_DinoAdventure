@@ -1,6 +1,10 @@
 # transpose map matrix for compatibility
 
 mapBorder = 150
+mapOffsetX = 0
+mapOffsetY = 0
+mapMove = False
+mapEdge = False
 
 def transpose(l1, l2):
     for i in range(len(l1[0])):

@@ -1,24 +1,9 @@
 import pygame, sys, time, math
 from map import *
 from assets import *
+
 pygame.init()
 clock = pygame.time.Clock()
-
-mapOffsetX = 0
-mapOffsetY = 0
-mapMove = False
-mapEdge = False
-
-# player location indices
-ppx = swidth/2-playerBaseDim*2
-ppy = sheight/2-playerBaseDim*2
-pinitx = ppx
-pinity = ppy
-
-# walking animation control
-walkingFrame = 4
-walkingInterim = walkingFrame
-playerFacingR = True
 
 # global speed value
 spd = 500

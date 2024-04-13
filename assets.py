@@ -7,6 +7,12 @@ screen = pygame.display.set_mode((swidth,sheight))
 playerBaseDim = 24
 playerScale = 4
 
+# player location indices
+ppx = swidth/2-playerBaseDim*2
+ppy = sheight/2-playerBaseDim*2
+pinitx = ppx
+pinity = ppy
+
 # right facing player sprites
 playerSpriteImg = pygame.image.load("doux.png").convert_alpha()
 playerSpriteSheet = spriteSheet.SpriteSheet(playerSpriteImg)
