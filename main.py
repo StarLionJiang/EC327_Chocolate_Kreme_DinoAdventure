@@ -35,7 +35,6 @@ while True:
 
     screen.fill((0,0,0))
 
-    tileCount = 0
     for x, i in enumerate(range(
         round(mapOffsetX),
         round(mapOffsetX)+len(mainMap)*tileDim*tileScale, 
@@ -51,8 +50,6 @@ while True:
                 (j > -tileDim*tileScale and j < sheight)
             ):
                 screen.blit(tileList[mainMap[x][y]], (i,j))
-                tileCount += 1
-    print(f"Total file count: {tileCount}")
 
     key = pygame.key.get_pressed()
     totKeys = sum(key)
@@ -131,7 +128,4 @@ while True:
     
     mapMove = False
 
-    clock.tick()
-    print(clock.get_fps())
-    
     pygame.display.update()

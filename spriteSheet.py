@@ -11,3 +11,4 @@ class SpriteSheet():
 		image.set_colorkey(colour)
 
 		return image
+	
