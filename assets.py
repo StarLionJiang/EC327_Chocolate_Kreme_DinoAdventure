@@ -13,6 +13,11 @@ ppy = sheight/2-playerBaseDim*2
 pinitx = ppx
 pinity = ppy
 
+# walking animation control
+walkingFrame = 4
+walkingInterim = walkingFrame
+playerFacingR = True
+
 # right facing player sprites
 playerSpriteImg = pygame.image.load("doux.png").convert_alpha()
 playerSpriteSheet = spriteSheet.SpriteSheet(playerSpriteImg)
