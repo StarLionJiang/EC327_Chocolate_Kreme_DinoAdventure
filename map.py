@@ -38,11 +38,29 @@ import pygame, sys
 from spriteSheet import *
 from assets import *
 
-def TestMap():
-    centeringX = int((swidth-len(mainMap)*tileDim*tileScale)/2)
-    centeringY = int((sheight-len(mainMap[0])*tileDim*tileScale)/2)
-    clock = pygame.time.Clock()
+def RenderMap(a, b):
+    for x, i in enumerate(range(
+        round(a),
+        round(a)+len(mainMap)*tileDim*tileScale, 
+        tileDim*tileScale
+    )):
+        for y, j in enumerate(range(
+            round(b),
+            round(b)+len(mainMap[0])*tileDim*tileScale, 
+            tileDim*tileScale
+        )):
+            # does not render tiles not within the game window
+            if (
+                (i > -tileDim*tileScale and i < swidth) and
+                (j > -tileDim*tileScale and j < sheight)
+            ):
+                screen.blit(tileList[mainMap[x][y]], (i,j))
 
+def TestMap():
+    mapWpx = len(mainMap)*tileDim*tileScale
+    mapHpx = len(mainMap[0])*tileDim*tileScale
+    centeringX = int((swidth-mapWpx)/2)
+    centeringY = int((sheight-mapHpx)/2)
 
     while True:
         for event in pygame.event.get():
@@ -54,17 +72,14 @@ def TestMap():
 
         for x, i in enumerate(range(
             centeringX, 
-            len(mainMap)*tileDim*tileScale+centeringX, 
+            centeringX+mapWpx, 
             tileDim*tileScale
         )):
             for y, j in enumerate(range(
-                centeringY, len(mainMap[0])*tileDim*tileScale+centeringY, 
+                centeringY, 
+                centeringY+mapHpx, 
                 tileDim*tileScale
             )):
                 screen.blit(tileList[mainMap[x][y]], (i,j))
 
         pygame.display.update()
-
-        
-        clock.tick()
-        print(clock.get_fps())

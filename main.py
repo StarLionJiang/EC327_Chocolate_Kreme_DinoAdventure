@@ -9,33 +9,22 @@ clock = pygame.time.Clock()
 spd = 500
 previousTime = time.time()
 
+# check to see map; change tileScale
+#TestMap()
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
             
-    # using deltatime for consistency
+    # deltatime for consistency
     dt = time.time() - previousTime
     previousTime = time.time()
 
     screen.fill((0,0,0))
 
-    for x, i in enumerate(range(
-        round(mapOffsetX),
-        round(mapOffsetX)+len(mainMap)*tileDim*tileScale, 
-        tileDim*tileScale
-    )):
-        for y, j in enumerate(range(
-            round(mapOffsetY),
-            round(mapOffsetY)+len(mainMap[0])*tileDim*tileScale, 
-            tileDim*tileScale
-        )):
-            if (
-                (i > -tileDim*tileScale and i < swidth) and
-                (j > -tileDim*tileScale and j < sheight)
-            ):
-                screen.blit(tileList[mainMap[x][y]], (i,j))            
+    RenderMap(mapOffsetX, mapOffsetY)
 
     key = pygame.key.get_pressed()
     totKeys = sum(key)
@@ -85,7 +74,6 @@ while True:
         if walkingFrame > 9:
             walkingFrame = 4
             walkingInterim = 4
-
 
     # screen edge and map border detenction and adjustments
     bigEdgeL = 0; bigedgeU = 0
@@ -148,7 +136,7 @@ while True:
     mapMove = False
     mapEdge = False
 
-    #clock.tick(60)
+    clock.tick()
     #print(clock.get_fps())
 
     pygame.display.update()
