@@ -65,8 +65,8 @@ while True:
          (key[pygame.K_s] and key[pygame.K_d])
         ) and not
         # account for >2 direction inputs
-        (key[pygame.K_a] and key[pygame.K_d] or 
-         key[pygame.K_w] and key[pygame.K_s])
+        ((key[pygame.K_a] and key[pygame.K_d]) or 
+         (key[pygame.K_w] and key[pygame.K_s]))
     ):
         spdMultiplier = 1/math.sqrt(2)
     else:
