@@ -53,4 +53,8 @@ for x in range(len(dirlist)):
 
 tileList = []
 for x in range(len(tileSprites)):
-    tileList.append(spriteSheet.SpriteSheet(tileSprites[x]).get_image(0, tileDim, tileDim, tileScale, (0,0,0)))
+    tileList.append(
+        spriteSheet.SpriteSheet(tileSprites[x]).get_image(
+            0, tileDim, tileDim, tileScale, (0,0,0)
+        )
+    )
