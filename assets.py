@@ -8,11 +8,8 @@ playerBaseDim = 24
 playerScale = 4
 
 # player location indices
-ppx = swidth/2-playerBaseDim*2
-ppy = sheight/2-playerBaseDim*2
-pinitx = ppx
-pinity = ppy
-
+ppx = (swidth-playerBaseDim*playerScale)/2
+ppy = (sheight-playerBaseDim*playerScale)/2
 # walking animation control
 walkingFrame = 4
 walkingInterim = walkingFrame
