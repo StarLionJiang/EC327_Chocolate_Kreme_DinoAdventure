@@ -6,7 +6,7 @@ pygame.init()
 clock = pygame.time.Clock()
 
 # global speed value
-spd = 500
+spd = 250
 previousTime = time.time()
 
 # check to see map; change tileScale
