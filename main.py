@@ -52,12 +52,6 @@ while True:
         walking = True
     else:
         walking = False
-
-
-    #pygame.draw.rect(
-    #    screen, (255,0,0), 
-    #    (round(ppx+48), round(ppy+48), 4, 4)
-    #)
     
     # screen edge and map border detenction and adjustments
     # screen shake when on map edge
