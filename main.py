@@ -106,7 +106,10 @@ while True:
     if key[pygame.K_a] and ppx >= mapBorder:
         playerFacingR = False
         ppx += -spd * dt * spdMultiplier
-    elif key[pygame.K_a] and ppx <= mapBorder and not collisionMap[playerTileIndex[0]][playerTileIndex[1]]:
+    elif (
+        key[pygame.K_a] and ppx <= mapBorder and not 
+        collisionMap[playerTileIndex[0]][playerTileIndex[1]]
+    ):
         mapMove = True
         mapOffsetX += dt*spd * mapMove * spdMultiplier
         if ppx > 0 and mapOffsetX > 0:
@@ -118,7 +121,10 @@ while True:
     if key[pygame.K_d] and ppx <= mapBorderR:
         playerFacingR = True
         ppx += spd * dt * spdMultiplier
-    elif key[pygame.K_d] and ppx >= mapBorderR and not collisionMap[playerTileIndex[0]][playerTileIndex[1]]:
+    elif (
+        key[pygame.K_d] and ppx >= mapBorderR and not 
+        collisionMap[playerTileIndex[0]][playerTileIndex[1]]
+    ):
         mapMove = True
         mapOffsetX += -dt*spd * mapMove * spdMultiplier
         if ppx < mapEdgePlayerR and mapOffsetX < bigEdgeR:
@@ -127,7 +133,10 @@ while True:
     # move up
     if key[pygame.K_w] and ppy >= mapBorder:
         ppy += -spd * dt * spdMultiplier
-    elif key[pygame.K_w] and ppy <= mapBorder and not collisionMap[playerTileIndex[0]][playerTileIndex[1]]:
+    elif (
+        key[pygame.K_w] and ppy <= mapBorder and not 
+        collisionMap[playerTileIndex[0]][playerTileIndex[1]] 
+    ):
         mapMove = True
         mapOffsetY += dt*spd * mapMove * spdMultiplier
         if ppy > 0 and mapOffsetY > 0:
@@ -137,12 +146,16 @@ while True:
     mapEdgePlayerD = mapBorderD + mapBorder
     if key[pygame.K_s] and ppy <= mapBorderD:
         ppy += spd * dt * spdMultiplier
-    elif key[pygame.K_s] and ppy >= mapBorderD and not collisionMap[playerTileIndex[0]][playerTileIndex[1]]:
+    elif (
+        key[pygame.K_s] and ppy >= mapBorderD and not 
+        collisionMap[playerTileIndex[0]][playerTileIndex[1]]
+    ):
         mapMove = True
         mapOffsetY += -dt*spd * mapMove * spdMultiplier
         if ppy < mapEdgePlayerD and mapOffsetY < bigedgeD:
             ppy += spd * dt * spdMultiplier
     
+    # check out of bound and reset positions
     pCenterX = ppx-mapOffsetX+playerBaseDim*playerScale/2
     pCenterY = ppy-mapOffsetY+playerBaseDim*playerScale/2
     tilePX = tileDim*tileScale
