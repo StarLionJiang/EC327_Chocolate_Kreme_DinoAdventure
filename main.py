@@ -24,8 +24,6 @@ while True:
 
     screen.fill((0,0,0))
 
-    RenderMap(mapOffsetX, mapOffsetY, ppx, ppy)
-
     key = pygame.key.get_pressed()
     totKeys = sum(key)
 
@@ -55,6 +53,33 @@ while True:
     else:
         walking = False
 
+
+    #pygame.draw.rect(
+    #    screen, (255,0,0), 
+    #    (round(ppx+48), round(ppy+48), 4, 4)
+    #)
+    
+    # screen edge and map border detenction and adjustments
+    # screen shake when on map edge
+    bigEdgeL = 0
+    bigEdgeR = -tileDim*tileScale*len(mainMap)+swidth
+    bigedgeU = 0
+    bigedgeD = -tileDim*tileScale*len(mainMap[0])+sheight
+    if mapOffsetX > bigEdgeL:
+        mapEdge = True
+        mapOffsetX = bigEdgeL
+    if mapOffsetX < bigEdgeR:
+        mapEdge = True
+        mapOffsetX = bigEdgeR
+    if mapOffsetY > bigedgeU:
+        mapEdge = True
+        mapOffsetY = bigedgeU
+    if mapOffsetY < bigedgeD:
+        mapEdge = True
+        mapOffsetY = bigedgeD  
+
+    RenderMap(mapOffsetX, mapOffsetY, ppx, ppy)
+    
     # check walking for animation cycling
     if not walking:
         walkingFrame = 2
@@ -74,87 +99,73 @@ while True:
             walkingFrame = 4
             walkingInterim = 4
 
-    #pygame.draw.rect(
-    #    screen, (255,0,0), 
-    #    (round(ppx+48), round(ppy+48), 4, 4)
-    #)
+    prePPX = ppx
+    prePPY = ppy
     
-    # screen edge and map border detenction and adjustments
-    # screen shake when on map edge
-    bigEdgeL = 0
-    bigEdgeR = -tileDim*tileScale*len(mainMap)+swidth
-    bigedgeU = 0
-    bigedgeD = -tileDim*tileScale*len(mainMap[0])+sheight
-    if mapOffsetX > bigEdgeL:
-        mapEdge = True
-        mapOffsetX = bigEdgeL + random.randint(-2,2)
-    if mapOffsetX < bigEdgeR:
-        mapEdge = True
-        mapOffsetX = bigEdgeR + random.randint(-2,2)
-    if mapOffsetY > bigedgeU:
-        mapEdge = True
-        mapOffsetY = bigedgeU + random.randint(-2,2)
-    if mapOffsetY < bigedgeD:
-        mapEdge = True
-        mapOffsetY = bigedgeD + random.randint(-2,2)
-
-    #print(noHit)
     # move to the left
-    if (
-        collisionMap[playerTileIndex[0]][playerTileIndex[1]] or
-        collisionMap[playerTileIndex[0]-1][playerTileIndex[1]]
-    ):
-        if key[pygame.K_a] and ppx >= mapBorder:
+    if key[pygame.K_a] and ppx >= mapBorder:
+        playerFacingR = False
+        ppx += -spd * dt * spdMultiplier
+    elif key[pygame.K_a] and ppx <= mapBorder and not collisionMap[playerTileIndex[0]][playerTileIndex[1]]:
+        mapMove = True
+        mapOffsetX += dt*spd * mapMove * spdMultiplier
+        if ppx > 0 and mapOffsetX > 0:
             playerFacingR = False
             ppx += -spd * dt * spdMultiplier
-        elif key[pygame.K_a] and ppx <= mapBorder:
-            mapMove = True
-            mapOffsetX += dt*spd * mapMove * spdMultiplier
-            if ppx > 0 and mapOffsetX > 0:
-                playerFacingR = False
-                ppx += -spd * dt * spdMultiplier
     # move to the right
     mapBorderR = swidth-mapBorder-playerBaseDim*playerScale
     mapEdgePlayerR = mapBorderR + mapBorder
-    if (
-        collisionMap[playerTileIndex[0]][playerTileIndex[1]] or
-        collisionMap[playerTileIndex[0]+1][playerTileIndex[1]]
-    ):
-        if key[pygame.K_d] and ppx <= mapBorderR:
+    if key[pygame.K_d] and ppx <= mapBorderR:
+        playerFacingR = True
+        ppx += spd * dt * spdMultiplier
+    elif key[pygame.K_d] and ppx >= mapBorderR and not collisionMap[playerTileIndex[0]][playerTileIndex[1]]:
+        mapMove = True
+        mapOffsetX += -dt*spd * mapMove * spdMultiplier
+        if ppx < mapEdgePlayerR and mapOffsetX < bigEdgeR:
             playerFacingR = True
             ppx += spd * dt * spdMultiplier
-        elif key[pygame.K_d] and ppx >= mapBorderR:
-            mapMove = True
-            mapOffsetX += -dt*spd * mapMove * spdMultiplier
-            if ppx < mapEdgePlayerR and mapOffsetX < bigEdgeR:
-                playerFacingR = True
-                ppx += spd * dt * spdMultiplier
     # move up
-    if (
-        collisionMap[playerTileIndex[0]][playerTileIndex[1]] or
-        collisionMap[playerTileIndex[0]][playerTileIndex[1]-1]
-    ):
-        if key[pygame.K_w] and ppy >= mapBorder:
+    if key[pygame.K_w] and ppy >= mapBorder:
+        ppy += -spd * dt * spdMultiplier
+    elif key[pygame.K_w] and ppy <= mapBorder and not collisionMap[playerTileIndex[0]][playerTileIndex[1]]:
+        mapMove = True
+        mapOffsetY += dt*spd * mapMove * spdMultiplier
+        if ppy > 0 and mapOffsetY > 0:
             ppy += -spd * dt * spdMultiplier
-        elif key[pygame.K_w] and ppy <= mapBorder:
-            mapMove = True
-            mapOffsetY += dt*spd * mapMove * spdMultiplier
-            if ppy > 0 and mapOffsetY > 0:
-                ppy += -spd * dt * spdMultiplier
     # move down
     mapBorderD = sheight-mapBorder-playerBaseDim*playerScale
     mapEdgePlayerD = mapBorderD + mapBorder
-    if (
-        collisionMap[playerTileIndex[0]][playerTileIndex[1]] or
-        collisionMap[playerTileIndex[0]][playerTileIndex[1]+1]
-    ):
-        if key[pygame.K_s] and ppy <= mapBorderD:
+    if key[pygame.K_s] and ppy <= mapBorderD:
+        ppy += spd * dt * spdMultiplier
+    elif key[pygame.K_s] and ppy >= mapBorderD and not collisionMap[playerTileIndex[0]][playerTileIndex[1]]:
+        mapMove = True
+        mapOffsetY += -dt*spd * mapMove * spdMultiplier
+        if ppy < mapEdgePlayerD and mapOffsetY < bigedgeD:
             ppy += spd * dt * spdMultiplier
-        elif key[pygame.K_s] and ppy >= mapBorderD:
-            mapMove = True
-            mapOffsetY += -dt*spd * mapMove * spdMultiplier
-            if ppy < mapEdgePlayerD and mapOffsetY < bigedgeD:
-                ppy += spd * dt * spdMultiplier
+    
+    pCenterX = ppx-mapOffsetX+playerBaseDim*playerScale/2
+    pCenterY = ppy-mapOffsetY+playerBaseDim*playerScale/2
+    tilePX = tileDim*tileScale
+    if (# check L
+        collisionMap[playerTileIndex[0]-1][playerTileIndex[1]] and
+        pCenterX < (playerTileIndex[0]-1)*tilePX+tilePX
+    ):
+        ppx = prePPX
+    if (# check R
+        collisionMap[playerTileIndex[0]+1][playerTileIndex[1]] and
+        pCenterX > (playerTileIndex[0]+1)*tilePX
+    ):
+        ppx = prePPX
+    if (# check U
+        collisionMap[playerTileIndex[0]][playerTileIndex[1]-1] and
+        pCenterY < (playerTileIndex[1]-1)*tilePX+tilePX
+    ):
+        ppy = prePPY
+    if (# check D
+        collisionMap[playerTileIndex[0]][playerTileIndex[1]+1] and
+        pCenterY > (playerTileIndex[1]+1)*tilePX
+    ):
+        ppy = prePPY
     
     mapMove = False
     mapEdge = False

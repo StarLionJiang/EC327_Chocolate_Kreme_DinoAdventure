@@ -19,10 +19,10 @@ def transpose(l1, l2):
 mainMapOg = [[ 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0], 
              [39,40,40,39, 2, 1, 0, 2, 2, 0, 0, 1, 1, 1, 0, 2, 1, 0, 2, 2, 0, 0], 
              [40, 1, 2,40,42, 2, 1, 0, 0, 1, 1, 1, 1, 2, 0, 0, 2, 1, 0, 0, 1, 1], 
-             [42, 2, 2, 2,41, 0, 1, 2, 0, 1, 0, 1, 2, 2, 2, 2, 0, 1, 2, 0, 1, 0], 
-             [ 0, 0, 0, 1,39,42, 0, 2, 2, 0, 1, 0, 0, 0, 1, 2, 0, 0, 2, 2, 0, 1], 
-             [ 0, 2, 1, 0, 0, 1, 0, 1, 2, 2, 2, 0, 2, 1, 0, 0, 1, 1, 2, 2, 2, 0], 
-             [ 0, 0, 1, 2, 1, 2, 1, 0, 1, 1, 1, 0, 0, 1, 2, 1, 2, 0, 1, 1, 1, 0], 
+             [42, 2, 2, 2,41, 0,39, 2, 0,42, 0, 1, 2, 2, 2, 2, 0, 1, 2, 0, 1, 0], 
+             [ 0, 0, 0,41,39,42,40,40,42,39, 1, 0, 0, 0, 1, 2, 0, 0, 2, 2, 0, 1], 
+             [ 0, 2, 1, 0, 0,41, 0, 1, 2, 2, 2, 0, 2, 1, 0, 0, 1, 1, 2, 2, 2, 0], 
+             [ 0, 0, 1,41, 0,39, 1, 0, 1, 1, 1, 0, 0, 1, 2, 1, 2, 0, 1, 1, 1, 0], 
              [ 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 2, 1, 2, 0, 2], 
              [ 1, 1, 1, 0, 2, 1, 0, 2, 2, 0, 0, 1, 1, 1, 0, 2, 1, 2, 2, 1, 2, 2], 
              [ 1, 1, 2, 0, 0, 2, 1, 0, 0, 1, 1, 1, 1, 2, 0, 0, 2, 0, 0, 0, 1, 1], 
@@ -35,7 +35,7 @@ mainMapOg = [[ 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0]
 mainMap = []
 mainMap = transpose(mainMapOg, mainMap)
 
-collisionMapOg = [[0]*len(mainMap)]*len(mainMap[0])
+collisionMapOg = [[1]*len(mainMap)]*len(mainMap[0])
 
 collisionMap = []
 collisionMap = transpose(collisionMapOg, collisionMap)
@@ -43,7 +43,7 @@ collisionMap = transpose(collisionMapOg, collisionMap)
 for i in range(len(mainMap)):
     for j in range(len(mainMap[0])):
         if mainMap[i][j] in range(39,43):
-            collisionMap[i][j] = 1
+            collisionMap[i][j] = 0
 
 # map preview frunction
 import pygame, sys
@@ -81,10 +81,14 @@ def RenderMap(mapOX, mapOY, px, py):
                 playerTileIndex[0] = round((px-mapOX)/(tileDim*tileScale))
                 playerTileIndex[1] = round((py-mapOY)/(tileDim*tileScale))
                 
-    #print(f"{playerTileIndex}")
-    #print(f"{[px-mapOX, py-mapOY]}")
-    #print(f"{playerTileIndex[0]*tileDim*tileScale}")
-
+    print(f"{playerTileIndex}")
+    print(f"p center loc {[px-mapOX+playerBaseDim*playerScale/2, py-mapOY+playerBaseDim*playerScale/2]}")
+    ptL = playerTileIndex[0]*tileDim*tileScale
+    ptR = playerTileIndex[0]*tileDim*tileScale + tileDim*tileScale
+    ptU = playerTileIndex[1]*tileDim*tileScale
+    ptD = playerTileIndex[1]*tileDim*tileScale + tileDim*tileScale
+    print(f"{ptL},{ptR},{ptU},{ptD}")
+    
 def TestMap():
     centeringX = int((swidth-mapWpx)/2)
     centeringY = int((sheight-mapHpx)/2)
