@@ -16,26 +16,26 @@ def transpose(l1, l2):
     return l2
 
 # map matrix with asset value at each tile location
-mainMapOg = [[ 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0], 
+mainMapOg = [[ 2,42, 2, 0, 2, 1, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0], 
              [39,40,40,39, 2, 1, 0, 2, 2, 0, 0, 1, 1, 1, 0, 2, 1, 0, 2, 2, 0, 0], 
              [40, 1, 2,40,42, 2, 1, 0, 0, 1, 1, 1, 1, 2, 0, 0, 2, 1, 0, 0, 1, 1], 
-             [42, 2, 2, 2,41, 0,39, 2, 0,42, 0, 1, 2, 2, 2, 2, 0, 1, 2, 0, 1, 0], 
-             [ 0, 0, 0,41,39,42,40,40,42,39, 1, 0, 0, 0, 1, 2, 0, 0, 2, 2, 0, 1], 
-             [ 0, 2, 1, 0, 0,41, 0, 1, 2, 2, 2, 0, 2, 1, 0, 0, 1, 1, 2, 2, 2, 0], 
-             [ 0, 0, 1,41, 0,39, 1, 0, 1, 1, 1, 0, 0, 1, 2, 1, 2, 0, 1, 1, 1, 0], 
-             [ 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0, 2, 1, 2, 0, 2, 1, 2, 1, 2, 0, 2], 
-             [ 1, 1, 1, 0, 2, 1, 0, 2, 2, 0, 0, 1, 1, 1, 0, 2, 1, 2, 2, 1, 2, 2], 
-             [ 1, 1, 2, 0, 0, 2, 1, 0, 0, 1, 1, 1, 1, 2, 0, 0, 2, 0, 0, 0, 1, 1], 
-             [ 1, 2, 2, 2, 2, 0, 1, 2, 0, 1, 0, 1, 2, 1, 2, 2, 2, 0, 2, 2, 1, 2], 
-             [ 0, 0, 0, 1, 2, 0, 1, 2, 2, 2, 0, 2, 0, 0, 1, 1, 1, 0, 1, 2, 2, 0], 
-             [ 0, 2, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 2, 1, 2, 0, 2, 1, 0, 0, 1], 
-             [ 0, 0, 1, 2, 1, 2, 2, 1, 2, 0, 2, 0, 2, 2, 2, 0, 0, 1, 1, 2, 2, 2]]
+             [42, 2, 2, 2,41, 0,39, 2, 0,42, 0, 1, 2, 2,40, 2, 0, 1, 2, 0, 1, 0], 
+             [ 0, 0, 0,41,39,42,40,40,42,39,41, 0, 0, 0,39,40,39,41,41,42,40,41], 
+             [ 0, 2, 1, 0, 0,41, 0, 1, 2, 2,39, 0,41, 1,42, 0, 1, 1, 2, 2, 2, 0], 
+             [ 0, 0, 1,41, 0,39, 1, 0, 1, 1,42,39,42,39,41, 1, 2, 0, 1, 1, 1, 0], 
+             [ 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0, 2, 1,40, 0, 2, 1, 2, 1, 2, 0, 2], 
+             [ 1, 1, 1, 0, 2, 1, 0, 2, 2, 0, 0,42,39,41, 0, 2, 1, 2, 2, 1, 2, 2], 
+             [ 1, 1, 2, 0, 0, 2, 1, 0, 0, 1, 1,42, 1, 2, 0, 0, 2, 0, 0, 0, 1, 1], 
+             [ 1, 2, 2, 2, 2, 0, 1, 2, 0, 1, 0,39, 2, 1, 2, 2, 2, 0, 2, 2, 1, 2], 
+             [ 0, 0, 0, 1, 2, 0, 1, 2, 2, 2, 0,40, 0, 0, 1, 1, 1, 0, 1, 2, 2, 0], 
+             [ 0, 2, 1, 0, 0, 1, 0, 1, 1, 1, 0,41, 0, 2, 1, 2, 0, 2, 1, 0, 0, 1], 
+             [ 0, 0, 1, 2, 1, 2, 2, 1, 2, 0, 2,42, 2, 2, 2, 0, 0, 1, 1, 2, 2, 2]]
 
 # transpose for RenderMap to read into for loops
 mainMap = []
 mainMap = transpose(mainMapOg, mainMap)
 
-collisionMapOg = [[1]*len(mainMap)]*len(mainMap[0])
+collisionMapOg = [[1]*(len(mainMap)+1)]*(len(mainMap[0])+1)
 
 collisionMap = []
 collisionMap = transpose(collisionMapOg, collisionMap)
@@ -47,7 +47,6 @@ for i in range(len(mainMap)):
 
 # map preview frunction
 import pygame, sys
-from spriteSheet import *
 from assets import *
 
 mapWpx = len(mainMap)*tileDim*tileScale
@@ -73,21 +72,13 @@ def RenderMap(mapOX, mapOY, px, py):
             ):
                 screen.blit(tileList[mainMap[x][y]], (i,j))
             if (
-                px+10 >= i and 
-                py+10 >= j and
+                px >= i and 
+                py >= j and
                 px <= i+tileDim*tileScale and 
                 py <= j+tileDim*tileScale
             ):
                 playerTileIndex[0] = round((px-mapOX)/(tileDim*tileScale))
                 playerTileIndex[1] = round((py-mapOY)/(tileDim*tileScale))
-                
-    print(f"{playerTileIndex}")
-    print(f"p center loc {[px-mapOX+playerBaseDim*playerScale/2, py-mapOY+playerBaseDim*playerScale/2]}")
-    ptL = playerTileIndex[0]*tileDim*tileScale
-    ptR = playerTileIndex[0]*tileDim*tileScale + tileDim*tileScale
-    ptU = playerTileIndex[1]*tileDim*tileScale
-    ptD = playerTileIndex[1]*tileDim*tileScale + tileDim*tileScale
-    print(f"{ptL},{ptR},{ptU},{ptD}")
     
 def TestMap():
     centeringX = int((swidth-mapWpx)/2)

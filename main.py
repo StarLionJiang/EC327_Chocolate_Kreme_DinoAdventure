@@ -1,4 +1,4 @@
-import pygame, sys, time, math, random
+import pygame, sys, time, math
 from map import *
 from assets import *
 
@@ -17,12 +17,16 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+
+    # control var for previous location
+    prePPX = ppx
+    prePPY = ppy
+    preMOX = mapOffsetX
+    preMOY = mapOffsetY
             
     # deltatime for consistency
     dt = time.time() - previousTime
     previousTime = time.time()
-
-    screen.fill((0,0,0))
 
     key = pygame.key.get_pressed()
     totKeys = sum(key)
@@ -78,23 +82,20 @@ while True:
     if not walking:
         walkingFrame = 2
         if playerFacingR:
-            screen.blit(playerFrames[walkingFrame], (ppx, ppy))
+            screen.blit(playerFrames[walkingFrame], (ppx, ppy-36))
         else:
-            screen.blit(playerInvFrames[walkingFrame], (ppx, ppy))
+            screen.blit(playerInvFrames[walkingFrame], (ppx, ppy-36))
     else:
         if playerFacingR:
-            screen.blit(playerFrames[walkingFrame], (ppx, ppy))
+            screen.blit(playerFrames[walkingFrame], (ppx, ppy-36))
         else:
-            screen.blit(playerInvFrames[walkingFrame], (ppx, ppy))
+            screen.blit(playerInvFrames[walkingFrame], (ppx, ppy-36))
         # cycling through sprites for walking animation
         walkingInterim += dt*spd/20
         walkingFrame = round(walkingInterim)
         if walkingFrame > 9:
             walkingFrame = 4
             walkingInterim = 4
-
-    prePPX = ppx
-    prePPY = ppy
     
     # move to the left
     if key[pygame.K_a] and ppx >= mapBorder:
@@ -133,7 +134,7 @@ while True:
     ):
         mapMove = True
         mapOffsetY += dt*spd * mapMove * spdMultiplier
-        if ppy > 0 and mapOffsetY > 0:
+        if ppy > 36 and mapOffsetY > 0:
             ppy += -spd * dt * spdMultiplier
     # move down
     mapBorderD = sheight-mapBorder-playerBaseDim*playerScale
@@ -146,39 +147,34 @@ while True:
     ):
         mapMove = True
         mapOffsetY += -dt*spd * mapMove * spdMultiplier
-        if ppy < mapEdgePlayerD and mapOffsetY < bigedgeD:
+        if ppy < mapEdgePlayerD+36 and mapOffsetY < bigedgeD:
             ppy += spd * dt * spdMultiplier
     
     # check out of bound and reset positions
     pCenterX = ppx-mapOffsetX+playerBaseDim*playerScale/2
     pCenterY = ppy-mapOffsetY+playerBaseDim*playerScale/2
     tilePX = tileDim*tileScale
-    if (# check L
-        collisionMap[playerTileIndex[0]-1][playerTileIndex[1]] and
-        pCenterX < (playerTileIndex[0]-1)*tilePX+tilePX
+    if (# check L and R
+        (collisionMap[playerTileIndex[0]-1][playerTileIndex[1]] and
+        pCenterX < (playerTileIndex[0])*tilePX) or 
+        (collisionMap[playerTileIndex[0]+1][playerTileIndex[1]] and
+        pCenterX > playerTileIndex[0]*tilePX+tilePX)
     ):
         ppx = prePPX
-    if (# check R
-        collisionMap[playerTileIndex[0]+1][playerTileIndex[1]] and
-        pCenterX > (playerTileIndex[0]+1)*tilePX
-    ):
-        ppx = prePPX
-    if (# check U
-        collisionMap[playerTileIndex[0]][playerTileIndex[1]-1] and
-        pCenterY < (playerTileIndex[1]-1)*tilePX+tilePX
+        mapOffsetX = preMOX
+    if (# check U and D
+        (collisionMap[playerTileIndex[0]][playerTileIndex[1]-1] and
+        pCenterY < (playerTileIndex[1])*tilePX) or 
+        (collisionMap[playerTileIndex[0]][playerTileIndex[1]+1] and
+        pCenterY > playerTileIndex[1]*tilePX+tilePX)
     ):
         ppy = prePPY
-    if (# check D
-        collisionMap[playerTileIndex[0]][playerTileIndex[1]+1] and
-        pCenterY > (playerTileIndex[1]+1)*tilePX
-    ):
-        ppy = prePPY
+        mapOffsetY = preMOY
     
     mapMove = False
     mapEdge = False
     
     # cap FPS at 60
     clock.tick(60)
-    # print(clock.get_fps())
 
     pygame.display.update()
