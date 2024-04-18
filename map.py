@@ -71,12 +71,6 @@ def RenderMap(mapOX, mapOY, px, py):
                 (j > -tileDim*tileScale and j < sheight)
             ):
                 screen.blit(tileList[mainMap[x][y]], (i,j))
-            if (
-                px >= i and 
-                py >= j and
-                px <= i+tileDim*tileScale and 
-                py <= j+tileDim*tileScale
-            ):
                 playerTileIndex[0] = round((px-mapOX)/(tileDim*tileScale))
                 playerTileIndex[1] = round((py-mapOY)/(tileDim*tileScale))
     
