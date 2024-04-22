@@ -15,6 +15,7 @@ class SpriteSheet():
 swidth = 960
 sheight = 576
 screen = pygame.display.set_mode((swidth,sheight))
+pygame.display.set_caption("Dino game")
 
 playerBaseDim = 24
 playerScale = 4
@@ -28,7 +29,7 @@ walkingInterim = walkingFrame
 playerFacingR = True
 
 # right facing player sprites
-playerSpriteImg = pygame.image.load("doux.png").convert_alpha()
+playerSpriteImg = pygame.image.load("dinoSprite/doux.png").convert_alpha()
 playerSpriteSheet = SpriteSheet(playerSpriteImg)
 
 playerFrames = []
