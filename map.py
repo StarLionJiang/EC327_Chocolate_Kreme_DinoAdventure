@@ -1,3 +1,17 @@
+import pygame, sys
+from assets import *
+pygame.init()
+
+# start screen text
+textFont = pygame.font.Font("freesansbold.ttf", 24)
+text = textFont.render("--- press space to start ---", True, (255,255,255), (0,0,0))
+textRect = text.get_rect()
+textRect.center = (swidth//2, sheight//2+150)
+titleFont = pygame.font.Font("freesansbold.ttf", 64)
+title = titleFont.render("Dino Adventure", True, (255,255,255), (0,0,0))
+titleRect = title.get_rect()
+titleRect.center = (swidth//2, sheight//2)
+
 # transpose map matrix for compatibility
 
 mapBorder = 150
@@ -64,8 +78,6 @@ for i in range(len(mainMap)):
             collisionMap[i][j] = 0
 
 # map preview frunction
-import pygame, sys
-from assets import *
 
 mapWpx = len(mainMap)*tileDim*tileScale
 mapHpx = len(mainMap[0])*tileDim*tileScale
