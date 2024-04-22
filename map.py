@@ -40,6 +40,24 @@ collisionMapOg = [[1]*(len(mainMap)+1)]*(len(mainMap[0])+1)
 collisionMap = []
 collisionMap = transpose(collisionMapOg, collisionMap)
 
+overlayOg = [[-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1], 
+             [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]
+
+overlay = []
+overlay = transpose(overlayOg, overlay)
+
 for i in range(len(mainMap)):
     for j in range(len(mainMap[0])):
         if mainMap[i][j] in range(39,43):
@@ -54,7 +72,7 @@ mapHpx = len(mainMap[0])*tileDim*tileScale
 
 playerTileIndex = [0,0]
 
-def RenderMap(mapOX, mapOY, px, py):
+def RenderLayer(mapOX, mapOY, grid):
     for x, i in enumerate(range(
         round(mapOX),
         round(mapOX)+mapWpx, 
@@ -68,11 +86,10 @@ def RenderMap(mapOX, mapOY, px, py):
             # only render tiles within the game window
             if (
                 (i > -tileDim*tileScale and i < swidth) and
-                (j > -tileDim*tileScale and j < sheight)
+                (j > -tileDim*tileScale and j < sheight) and
+                grid[x][y] != -1
             ):
-                screen.blit(tileList[mainMap[x][y]], (i,j))
-                playerTileIndex[0] = round((px-mapOX)/(tileDim*tileScale))
-                playerTileIndex[1] = round((py-mapOY)/(tileDim*tileScale))
+                screen.blit(tileList[grid[x][y]], (i,j))
     
 def TestMap():
     centeringX = int((swidth-mapWpx)/2)

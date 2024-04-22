@@ -58,11 +58,10 @@ while True:
         walking = False
     
     # screen edge and map border detenction and adjustments
-    # screen shake when on map edge
     bigEdgeL = 0
-    bigEdgeR = -tileDim*tileScale*len(mainMap)+swidth
+    bigEdgeR = -mapWpx+swidth
     bigedgeU = 0
-    bigedgeD = -tileDim*tileScale*len(mainMap[0])+sheight
+    bigedgeD = -mapHpx+sheight
     if mapOffsetX > bigEdgeL:
         mapEdge = True
         mapOffsetX = bigEdgeL
@@ -74,9 +73,12 @@ while True:
         mapOffsetY = bigedgeU
     if mapOffsetY < bigedgeD:
         mapEdge = True
-        mapOffsetY = bigedgeD  
+        mapOffsetY = bigedgeD
+        
+    playerTileIndex[0] = round((ppx-mapOffsetX)/(tileDim*tileScale))
+    playerTileIndex[1] = round((ppy-mapOffsetY)/(tileDim*tileScale))
 
-    RenderMap(mapOffsetX, mapOffsetY, ppx, ppy)
+    RenderLayer(mapOffsetX, mapOffsetY, mainMap)
     
     # check walking for animation cycling
     if not walking:
@@ -95,7 +97,9 @@ while True:
         walkingFrame = round(walkingInterim)
         if walkingFrame > 9:
             walkingFrame = 4
-            walkingInterim = 4
+            walkingInterim = 4.0
+            
+    RenderLayer(mapOffsetX, mapOffsetY, overlay)
     
     # move to the left
     if key[pygame.K_a] and ppx >= mapBorder:
@@ -153,20 +157,19 @@ while True:
     # check out of bound and reset positions
     pCenterX = ppx-mapOffsetX+playerBaseDim*playerScale/2
     pCenterY = ppy-mapOffsetY+playerBaseDim*playerScale/2
-    tilePX = tileDim*tileScale
     if (# check L and R
         (collisionMap[playerTileIndex[0]-1][playerTileIndex[1]] and
-        pCenterX < (playerTileIndex[0])*tilePX) or 
+        pCenterX < playerTileIndex[0]*tileDim*tileScale) or 
         (collisionMap[playerTileIndex[0]+1][playerTileIndex[1]] and
-        pCenterX > playerTileIndex[0]*tilePX+tilePX)
+        pCenterX > playerTileIndex[0]*tileDim*tileScale+tileDim*tileScale)
     ):
         ppx = prePPX
         mapOffsetX = preMOX
     if (# check U and D
         (collisionMap[playerTileIndex[0]][playerTileIndex[1]-1] and
-        pCenterY < (playerTileIndex[1])*tilePX) or 
+        pCenterY < playerTileIndex[1]*tileDim*tileScale) or 
         (collisionMap[playerTileIndex[0]][playerTileIndex[1]+1] and
-        pCenterY > playerTileIndex[1]*tilePX+tilePX)
+        pCenterY > playerTileIndex[1]*tileDim*tileScale+tileDim*tileScale)
     ):
         ppy = prePPY
         mapOffsetY = preMOY
@@ -176,5 +179,6 @@ while True:
     
     # cap FPS at 60
     clock.tick(60)
+    print(clock.get_fps())
 
     pygame.display.update()
