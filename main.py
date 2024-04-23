@@ -200,7 +200,13 @@ while True:
         mapMove = False
         mapEdge = False
         
+        fpsfont = pygame.font.Font("freesansbold.ttf", 16)
+        fps = fpsfont.render(f"{round(clock.get_fps())}", True, (255,0,0), (0,0,0))
+        fpsRect = fps.get_rect()
+        fpsRect.center = (912, 48)
+        screen.blit(fps, fpsRect)
+        
     # cap FPS at 60
-    clock.tick(60)
+    clock.tick()
 
     pygame.display.update()
