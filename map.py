@@ -3,14 +3,23 @@ from assets import *
 pygame.init()
 
 # start screen text
-textFont = pygame.font.Font("freesansbold.ttf", 24)
-text = textFont.render("--- press space to start ---", True, (255,255,255), (0,0,0))
-textRect = text.get_rect()
-textRect.center = (swidth//2, sheight//2+150)
 titleFont = pygame.font.Font("freesansbold.ttf", 64)
 title = titleFont.render("Dino Adventure", True, (255,255,255), (0,0,0))
 titleRect = title.get_rect()
 titleRect.center = (swidth//2, sheight//2)
+textFont = pygame.font.Font("freesansbold.ttf", 24)
+text = textFont.render("--- press space to continue ---", True, (255,255,255), (0,0,0))
+textRect = text.get_rect()
+textRect.center = (swidth//2, sheight//2+150)
+
+# tutorial screen text
+tutorialFont = pygame.font.Font("freesansbold.ttf", 24)
+tutorial = tutorialFont.render("Use WASD to move around", True, (255,255,255), (0,0,0))
+tutorialRect = tutorial.get_rect()
+tutorialRect.center = (swidth//2, sheight//2)
+cont = tutorialFont.render("continue", True, (0,0,0), (255,255,255))
+contRect = cont.get_rect()
+contRect.center = (960-80,576-80)
 
 # transpose map matrix for compatibility
 

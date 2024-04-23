@@ -11,6 +11,8 @@ spd = 250
 previousTime = time.time()
 state = 0
 
+pygame.mouse.set_cursor(pygame.cursors.broken_x)
+
 # check to see map; change tileScale
 #TestMap()
 
@@ -20,14 +22,26 @@ while True:
             pygame.quit()
             sys.exit()
 
+    screen.fill((0,0,0))
+    
+    key = pygame.key.get_pressed()
+    mClick = pygame.mouse.get_pressed()
+    (mX,mY) = pygame.mouse.get_pos()
+        
     if state == 0:
         screen.blit(title, titleRect)
         screen.blit(text, textRect)
-        key = pygame.key.get_pressed()
         if key[pygame.K_SPACE]:
             state = 1
 
-    if state == 1:
+    elif state == 1:
+        screen.blit(tutorial, tutorialRect)
+        pygame.draw.rect(screen, (255,255,255), (800,416,160,160))
+        screen.blit(cont, contRect)
+        if mX > 800 and mX < 960 and mY > 416 and mY < 576 and mClick[0]:
+            state = 2
+        
+    elif state == 2:
         # control var for previous location
         prePPX = ppx
         prePPY = ppy
@@ -38,7 +52,6 @@ while True:
         dt = time.time() - previousTime
         previousTime = time.time()
 
-        key = pygame.key.get_pressed()
         totKeys = sum(key)
 
         # account for diagonal speed: 1/sqrt(2) multiplier
