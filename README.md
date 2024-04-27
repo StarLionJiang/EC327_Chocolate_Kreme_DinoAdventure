@@ -8,6 +8,7 @@ This Python-based game uses the Pygame library to create a maze adventure game, 
 - **dinoSprite/**: Houses sprite images for the dinosaur character.
 - **main.py**: The main script to run the game.
 - **map.py**: Manages the map configurations.
+- **map_level2.py**: Store the map for level 2.
 - **assets.py**: Handles loading and managing game assets.
 
 ## Features
