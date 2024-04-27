@@ -1,10 +1,7 @@
-# PyGame-First
-
-First time utilizing Python's Pygame library to create a game
-# Python Maze Adventure Game
+# Dino-Adventure: a Python Maze Adventure Game
 
 ## Overview
-This Python-based game leverages the Pygame library to create a maze adventure game, using object-oriented principles to manage open-source assets within the game environment. Each level presents a unique maze configuration, providing a progressive challenge for players. The game is particularly designed for beginner Python game developers, offering a hands-on way to learn how to interact with game assets and implement core game mechanics.
+This Python-based game uses the Pygame library to create a maze adventure game, using object-oriented principles to manage open-source assets within the game environment. Each level presents a unique maze configuration, providing a progressive challenge for players. The game is particularly designed for beginner Python game developers, offering a hands-on way to learn how to interact with game assets and implement core game mechanics.
 
 ## Game Structure
 - **MapAssets/**: Contains assets for map designs.
@@ -36,4 +33,4 @@ Navigate to the game directory and run the game using Python:
 Contributions are welcome, especially from those who are new to game development. If you have an idea for improving the game or adding new features, please fork the repository and submit a pull request.
 
 ## License
-Open-sourced under the MIT License. See the LICENSE file for more details.
+Open-sourced. Details see the repo.
