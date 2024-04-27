@@ -14,7 +14,9 @@ state = 0
 pygame.mouse.set_cursor(pygame.cursors.broken_x)
 
 # check to see map; change tileScale
-#TestMap()
+# TestMap()
+
+key = pygame.key.get_pressed()
 
 while True:
     for event in pygame.event.get():
@@ -24,24 +26,27 @@ while True:
 
     screen.fill((0,0,0))
     
+    # control for single actuation key press
+    prevKey = key
     key = pygame.key.get_pressed()
+    
+    # mouse input control
     mClick = pygame.mouse.get_pressed()
-    (mX,mY) = pygame.mouse.get_pos()
-        
+    (mouseX,mouseY) = pygame.mouse.get_pos()
+    
     if state == 0:
         screen.blit(title, titleRect)
         screen.blit(text, textRect)
-        if key[pygame.K_SPACE]:
+        if key[pygame.K_SPACE] and not prevKey[pygame.K_SPACE]:
             state = 1
 
     elif state == 1:
         screen.blit(tutorial, tutorialRect)
-        pygame.draw.rect(screen, (255,255,255), (800,416,160,160))
-        screen.blit(cont, contRect)
-        if mX > 800 and mX < 960 and mY > 416 and mY < 576 and mClick[0]:
+        screen.blit(text, textRect)
+        if key[pygame.K_SPACE] and not prevKey[pygame.K_SPACE]:
             state = 2
         
-    elif state == 2:
+    elif state >= 2:
         # control var for previous location
         prePPX = ppx
         prePPY = ppy
@@ -101,7 +106,12 @@ while True:
         playerTileIndex[0] = round((ppx-mapOffsetX)/(tileDim*tileScale))
         playerTileIndex[1] = round((ppy-mapOffsetY)/(tileDim*tileScale))
 
-        RenderLayer(mapOffsetX, mapOffsetY, mainMap)
+        if state == 2:
+            RenderLayer(mapOffsetX, mapOffsetY, mainMap1, mapWpx, mapHpx)
+            RenderLayer(mapOffsetX, mapOffsetY, overlay1, mapWpx, mapHpx)
+        if state == 3:
+            RenderLayer(mapOffsetX, mapOffsetY, mainMap2, mapWpx, mapHpx)
+            RenderLayer(mapOffsetX, mapOffsetY, overlay2, mapWpx, mapHpx)
         
         # check walking for animation cycling
         if not walking:
@@ -122,8 +132,6 @@ while True:
                 walkingFrame = 4
                 walkingInterim = 4.0
                 
-        RenderLayer(mapOffsetX, mapOffsetY, overlay)
-        
         # move to the left
         if key[pygame.K_a] and ppx >= mapBorder:
             playerFacingR = False
@@ -200,13 +208,35 @@ while True:
         mapMove = False
         mapEdge = False
         
+        if ppx > 864 and ppy > 480:
+            if state == 2:
+                state = 3
+            elif state == 3:
+                state = 0
+            ppx = 96
+            ppy = 96
+            mapOffsetX = 0
+            mapOffsetY = 0
+            
+            collisionMap = [[1]*(len(mainMap2[0])+1) for _ in range(len(mainMap2)+1)]
+            for i in range(len(mainMap2)):
+                for j in range(len(mainMap2[0])):
+                    if mainMap2[i][j] in range(39,43):
+                        collisionMap[i][j] = 0
+
+            mapWpx = len(mainMap2)*tileDim*tileScale
+            mapHpx = len(mainMap2[0])*tileDim*tileScale
+                
         fpsfont = pygame.font.Font("freesansbold.ttf", 16)
-        fps = fpsfont.render(f"{round(clock.get_fps())}", True, (255,0,0), (0,0,0))
+        fps = fpsfont.render(
+            f"{round(clock.get_fps())}", 
+            True, (255,0,0), (0,0,0)
+        )
         fpsRect = fps.get_rect()
         fpsRect.center = (912, 48)
         screen.blit(fps, fpsRect)
         
-    # cap FPS at 60
-    clock.tick()
+    # cap FPS at 30
+    clock.tick(30)
 
     pygame.display.update()
