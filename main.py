@@ -46,7 +46,7 @@ while True:
         if key[pygame.K_SPACE] and not prevKey[pygame.K_SPACE]:
             state = 2
         
-    elif state >= 2:
+    elif state >= 2 and state < 4:
         # control var for previous location
         prePPX = ppx
         prePPY = ppy
@@ -209,10 +209,7 @@ while True:
         mapEdge = False
         
         if ppx > 864 and ppy > 480:
-            if state == 2:
-                state = 3
-            elif state == 3:
-                state = 0
+            state+=1
             ppx = 96
             ppy = 96
             mapOffsetX = 0
@@ -229,14 +226,17 @@ while True:
                 
         fpsfont = pygame.font.Font("freesansbold.ttf", 16)
         fps = fpsfont.render(
-            f"{round(clock.get_fps())}", 
-            True, (255,0,0), (0,0,0)
+            f"FPS: {round(clock.get_fps())}", 
+            True, (125,175,255), (0,0,0)
         )
         fpsRect = fps.get_rect()
         fpsRect.center = (912, 48)
         screen.blit(fps, fpsRect)
         
-    # cap FPS at 30
-    clock.tick(30)
+    if state == 4:
+        screen.blit(end, endRect)
+        
+    # cap FPS at 60
+    clock.tick(60)
 
     pygame.display.update()

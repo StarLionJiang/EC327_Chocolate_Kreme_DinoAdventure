@@ -27,6 +27,15 @@ tutorial = tutorialFont.render(
 tutorialRect = tutorial.get_rect()
 tutorialRect.center = (swidth//2, sheight//2)
 
+# end screen text
+endFont = pygame.font.Font("freesansbold.ttf", 64)
+end = endFont.render(
+    f"GAME OVER --- YOU WON!", 
+    True, (255,255,255), (0,0,0)
+)
+endRect = end.get_rect()
+endRect.center = (swidth//2,sheight//2)
+
 # transpose map matrix for compatibility
 
 mapBorder = 150
