@@ -34,4 +34,4 @@ Navigate to the game directory and run the game using Python:
 Contributions are welcome, especially from those who are new to game development. If you have an idea for improving the game or adding new features, please fork the repository and submit a pull request.
 
 ## License
-Open-sourced. Details see the repo.
+Open-sourced. Details see the repo. 
